@@ -1,5 +1,7 @@
 package com.verhas.licensor;
 
+import static com.verhas.licensor.License.fromResource;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +20,6 @@ import org.bouncycastle.openpgp.PGPUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static com.verhas.licensor.License.fromResource;
 
 /**
  *
@@ -54,23 +55,23 @@ public class TestLicenseClass {
     }
 
     private final byte[] digest = new byte[]{(byte) 0x69, (byte) 0xBB,
-        (byte) 0x8E, (byte) 0x6F, (byte) 0x99, (byte) 0xF2, (byte) 0x15,
-        (byte) 0x37, (byte) 0x7C, (byte) 0x39, (byte) 0x54, (byte) 0x6F,
-        (byte) 0x1F, (byte) 0x5D, (byte) 0xBA, (byte) 0xC9, (byte) 0x7E,
-        (byte) 0x35, (byte) 0x7C, (byte) 0xBF, (byte) 0x7F, (byte) 0xE6,
-        (byte) 0xA2, (byte) 0x17, (byte) 0x9B, (byte) 0x7E, (byte) 0x3E,
-        (byte) 0x92, (byte) 0x7F, (byte) 0xB6, (byte) 0x0C, (byte) 0x6A,
-        (byte) 0xDA, (byte) 0x8D, (byte) 0x46, (byte) 0xBE, (byte) 0xED,
-        (byte) 0x96, (byte) 0x87, (byte) 0x24, (byte) 0x06, (byte) 0x98,
-        (byte) 0x7C, (byte) 0x6B, (byte) 0x80, (byte) 0xB2, (byte) 0x91,
-        (byte) 0x19, (byte) 0x0D, (byte) 0x22, (byte) 0x66, (byte) 0x89,
-        (byte) 0x9E, (byte) 0xF0, (byte) 0xB1, (byte) 0xDA, (byte) 0xE9,
-        (byte) 0x74, (byte) 0x70, (byte) 0x2F, (byte) 0x80, (byte) 0x6E,
-        (byte) 0x6F, (byte) 0x67};
+            (byte) 0x8E, (byte) 0x6F, (byte) 0x99, (byte) 0xF2, (byte) 0x15,
+            (byte) 0x37, (byte) 0x7C, (byte) 0x39, (byte) 0x54, (byte) 0x6F,
+            (byte) 0x1F, (byte) 0x5D, (byte) 0xBA, (byte) 0xC9, (byte) 0x7E,
+            (byte) 0x35, (byte) 0x7C, (byte) 0xBF, (byte) 0x7F, (byte) 0xE6,
+            (byte) 0xA2, (byte) 0x17, (byte) 0x9B, (byte) 0x7E, (byte) 0x3E,
+            (byte) 0x92, (byte) 0x7F, (byte) 0xB6, (byte) 0x0C, (byte) 0x6A,
+            (byte) 0xDA, (byte) 0x8D, (byte) 0x46, (byte) 0xBE, (byte) 0xED,
+            (byte) 0x96, (byte) 0x87, (byte) 0x24, (byte) 0x06, (byte) 0x98,
+            (byte) 0x7C, (byte) 0x6B, (byte) 0x80, (byte) 0xB2, (byte) 0x91,
+            (byte) 0x19, (byte) 0x0D, (byte) 0x22, (byte) 0x66, (byte) 0x89,
+            (byte) 0x9E, (byte) 0xF0, (byte) 0xB1, (byte) 0xDA, (byte) 0xE9,
+            (byte) 0x74, (byte) 0x70, (byte) 0x2F, (byte) 0x80, (byte) 0x6E,
+            (byte) 0x6F, (byte) 0x67};
 
     @Test
     public void calculatesPublicKeyRingDigest() throws IOException,
-            PGPException, Exception {
+    PGPException, Exception {
         final License license = new License();
         license.loadKey(fromResource("secring.gpg"),
                 "Peter Verhas (licensor test key) <peter@verhas.com>");
@@ -123,8 +124,8 @@ public class TestLicenseClass {
 
     @Test
     public void loadsEncodedLicenseString() throws IOException, PGPException,
-            NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License lic = new License();
         lic.loadKeyRingFromResource("pubring.gpg", digest);
         lic.setLicenseEncoded("-----BEGIN PGP MESSAGE-----\n"
@@ -138,33 +139,31 @@ public class TestLicenseClass {
                 + "-----END PGP MESSAGE-----\n");
         Assert.assertTrue(lic.isVerified());
         String z = lic.getLicenseString();
-        z = z.substring(z.length() - 4);
-        Assert.assertEquals("a=b\n", z);
+        Assert.assertEquals(false, -1 == z.indexOf("a=b"));
         Assert.assertEquals((Long) (-3623885160523215197L),
-                (Long) lic.getDecodeKeyId());
+                lic.getDecodeKeyId());
         Assert.assertEquals("b", lic.getFeature("a"));
     }
 
     @Test
     public void loadsEncodedLicenseFile() throws IOException, PGPException,
-            NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License lic = new License();
         lic.loadKeyRingFromResource("pubring.gpg", digest);
         lic.setLicenseEncodedFromResource("license-encoded.txt");
         Assert.assertTrue(lic.isVerified());
         String z = lic.getLicenseString();
-        z = z.substring(z.length() - 4);
-        Assert.assertEquals("a=b\n", z);
+        Assert.assertEquals(false, -1 == z.indexOf("a=b"));
         Assert.assertEquals((Long) (-3623885160523215197L),
-                (Long) lic.getDecodeKeyId());
+                lic.getDecodeKeyId());
         Assert.assertEquals("b", lic.getFeature("a"));
     }
 
     @Test
     public void encodesLicense1() throws IOException, PGPException,
-            NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License license = new License();
         license.setLicense("");
         license.setFeature("a", "b");
@@ -178,8 +177,8 @@ public class TestLicenseClass {
 
     @Test
     public void testEncodeLicense2() throws IOException, PGPException,
-            NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License license = new License();
         license.setLicense("");
         license.setFeature("a", "b");
@@ -221,8 +220,8 @@ public class TestLicenseClass {
 
     @Test(expected = IllegalArgumentException.class)
     public void loadingKeyWithBadNameThrowsException() throws IOException,
-            PGPException, NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    PGPException, NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License license = new License();
         license.setLicense("");
         license.setFeature("a", "b");
@@ -236,8 +235,8 @@ public class TestLicenseClass {
 
     @Test(expected = PGPException.class)
     public void loadingKeyWithBadPasswordThrowsException() throws IOException,
-            PGPException, NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException {
+    PGPException, NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException {
         final License license = new License();
         license.setLicense("");
         license.setFeature("a", "b");
@@ -281,8 +280,8 @@ public class TestLicenseClass {
 
     @Test
     public void testMain() throws IOException, PGPException,
-            NoSuchAlgorithmException, NoSuchProviderException,
-            SignatureException, Exception {
+    NoSuchAlgorithmException, NoSuchProviderException,
+    SignatureException, Exception {
 
         final License license = new License();
         license.setLicense("");
