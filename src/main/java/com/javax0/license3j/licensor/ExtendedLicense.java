@@ -65,6 +65,8 @@ public class ExtendedLicense extends License {
      * Set the expiration date of the license. Since the date is stored in the
      * format {@code yyyy-MM-dd} the actual hours, minutes and so on will be
      * chopped off.
+     *
+     * @param expiryDate the date when the license expires
      */
     public void setExpiry(final Date expiryDate) {
         setFeature(EXPIRATION_DATE, expiryDate);
@@ -80,7 +82,7 @@ public class ExtendedLicense extends License {
      * Generating UUID can be handy when you want to identify each license
      * individually. For example you want to store revocation information about
      * each license. The url to check the revocation may contain the
-     * <tt>${licenseId}</tt> place holder that will be replaced by the actual
+     * {@code $&#123;licenseId&#125;} place holder that will be replaced by the actual
      * uuid stored in the license.
      *
      * @return the generated uuid.
