@@ -22,6 +22,11 @@ what is the use of a license manager for nonprofit purposes? Nothing. And we did
 no use. Therefore this license manager is free to use for profit purposes as well under the license terms covered by
 Apache 2.0 license as defined on the web page http://www.apache.org/licenses/LICENSE-2.0
 
+## JavaDoc
+
+
+https://verhas.github.io/License3j/
+
 ## In short
 
 ```java
@@ -48,7 +53,7 @@ byte [] key = new byte[] {
     (byte)0xDF, (byte)0x76, (byte)0xD0, (byte)0xA7, (byte)0x02, (byte)0x03, (byte)0x01, (byte)0x00, 
     (byte)0x01, 
     };
-// check that the license os signed properly
+// check that the license is signed properly
 if( !license.isOK(key) ){
     // if not signed, stop the application
     return;
@@ -141,7 +146,7 @@ generateKeys algorithm=RSA size=1024 format=BINARY public=public.key private=pri
 
 This will generate the public and the private keys and save them into the files `public.key` and `private.key`. Also
 the keys remain loaded into the REPL application. To embed this key into the application you can execute the
-command `digestPublicKey` that will dump the Java code to the screen, something like:
+command `dumpPublicKey` that will dump the Java code to the screen, something like:
 
 ```java
 --KEY DIGEST START
@@ -228,7 +233,7 @@ syntax of UNIX shell.
 
 ## License3j REPL application
 
-To start the repl (Read Evaluate Print Loop) using thr Java command:
+To start the repl (Read Evaluate Print Loop) using the Java command:
 ```
 $ java -cp license3j-3.0.0.jar javax0.license3j.Repl
 ``` 
